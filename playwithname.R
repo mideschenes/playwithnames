@@ -56,6 +56,152 @@ top <- function(n = 1) {
         return (result)
 }
 
+## return a dataframe in which each line is a year with the n 
+## most pupular name for boys and for girls (where n is the argument)
+## example : to show top 3 names by year :
+## > head(top(3)) 
+##     Year Top 1 boys Top 1 girls Top 2 boys Top 2 girls Top 3 boys Top 3 girls
+## 1    1880       John        Mary    William        Anna      James        Emma
+## 1001 1881       John        Mary    William        Anna      James        Emma
+## 2001 1882       John        Mary    William        Anna      James        Emma
+## 3001 1883       John        Mary    William        Anna      James        Emma
+## 4001 1884       John        Mary    William        Anna      James        Emma
+## 5001 1885       John        Mary    William        Anna      James        Emma
+topv2 <- function(n = 1) {
+        
+        data <- read.csv("baby-names.csv")
+        suppressWarnings(data[, "prop"] <- as.numeric(data[, "prop"]))
+        
+        ## order data by prop, descending
+        data <- data[order(-data$prop),]
+        
+        ## subset data in 2 genders
+        boys <- subset(data, sex == "boy")
+        girls <- subset(data, sex == "girl")
+
+        
+        ## order data by prop, descending
+        data <- data[order(-data$prop),]
+        
+        
+        ## subset data in 2 genders
+        boys <- subset(data, sex == "boy")
+        girls <- subset(data, sex == "girl")
+        
+        ## split data by year
+        boysbyyear <- split(boys, boys$year)
+        girlsbyyear <- split(girls, girls$year)
+       
+        ## initilizing the data frame returned at the end of the function
+        result <- data.frame()
+        
+        ## get every years in data
+        years = sort(unique(data$year))
+
+        for (y in years){
+                boysyear <- boysbyyear[as.character(y)]
+                girlsyear <- girlsbyyear[as.character(y)]
+                
+                ## create a dataframe for the current year
+                line = data.frame(y)
+                
+                ## for every top "n", add 2 columns in the dataframe of the 
+                ## year : one for the top "n" boys and one for the top "n" girls
+                for (i in 1:n){
+                        boysname <- boysyear[[1]][i,"name", drop=FALSE]
+                        girlsname <- girlsyear[[1]][i,"name", drop=FALSE]
+                        line = cbind(line, boysname, girlsname)
+                }                
+                
+                ## add the current dataframe to the dataframe to return
+                result <- rbind(result, line)
+
+        }
+        
+        ## naming the columns
+        names(result)[1] = "Year"
+        for(i in 1:n){
+                names(result)[2*i] <- paste("Top", i, "boys")
+                names(result)[2*i+1] <- paste("Top", i, "girls")
+        }
+        
+        return (result)
+}
+
+## return a dataframe in which each line is a year with the n 
+## most pupular name for boys and for girls (where n is the argument)
+## example : to show top 3 names by year :
+## > head(top(3)) 
+##     Year Top 1 boys Top 1 girls Top 2 boys Top 2 girls Top 3 boys Top 3 girls
+## 1    1880       John        Mary    William        Anna      James        Emma
+## 1001 1881       John        Mary    William        Anna      James        Emma
+## 2001 1882       John        Mary    William        Anna      James        Emma
+## 3001 1883       John        Mary    William        Anna      James        Emma
+## 4001 1884       John        Mary    William        Anna      James        Emma
+## 5001 1885       John        Mary    William        Anna      James        Emma
+topv3 <- function(n = 1) {
+        
+        data <- read.csv("baby-names.csv")
+        suppressWarnings(data[, "prop"] <- as.numeric(data[, "prop"]))
+        
+        ## order data by prop, descending
+        data <- data[order(-data$prop),]
+        
+        ## subset data in 2 genders
+        boys <- subset(data, sex == "boy")
+        girls <- subset(data, sex == "girl")
+        
+        
+        ## order data by prop, descending
+        data <- data[order(-data$prop),]
+        
+        
+        ## subset data in 2 genders
+        boys <- subset(data, sex == "boy")
+        girls <- subset(data, sex == "girl")
+        
+        ## split data by year
+        boysbyyear <- split(boys, boys$year)
+        girlsbyyear <- split(girls, girls$year)
+        
+        ## initilizing the data frame returned at the end of the function
+        result <- data.frame()
+        
+        ## get every years in data
+        years = sort(unique(data$year))
+        
+        ## for every top "n", add 2 columns in the dataframe of the 
+        ## year : one for the top "n" boys and one for the top "n" girls
+        for (i in 1:n){
+                
+                ## create a dataframe for the current rank
+                line = data.frame(i)
+                
+                for (y in years){
+                        boysyear <- boysbyyear[as.character(y)]
+                        girlsyear <- girlsbyyear[as.character(y)]
+                        
+                        boysname <- boysyear[[1]][i,"name", drop=FALSE]
+                        girlsname <- girlsyear[[1]][i,"name", drop=FALSE]
+                        line = cbind(line, boysname, girlsname)
+                }                
+                
+                ## add the current dataframe to the dataframe to return
+                result <- rbind(result, line)
+                
+        }
+        
+        ## naming the columns
+        names(result)[1] = "Rank"
+        i <- 1
+        for(y in years){
+                names(result)[2*i] <- paste(y, "boys")
+                names(result)[2*i+1] <- paste(y, "girls")
+                i <- i+1
+        }
+        
+        return (result)
+}
 
 ## return the first year where a name or a partial name (first argument)
 ## is in top n (second argument) for a gender (third argument, boy or girl)
