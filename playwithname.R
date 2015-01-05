@@ -56,10 +56,11 @@ top <- function(n = 1) {
         return (result)
 }
 
+## (same as top, but a little bit fastest for a little n)
 ## return a dataframe in which each line is a year with the n 
 ## most pupular name for boys and for girls (where n is the argument)
 ## example : to show top 3 names by year :
-## > head(top(3)) 
+## > head(topv2(3)) 
 ##     Year Top 1 boys Top 1 girls Top 2 boys Top 2 girls Top 3 boys Top 3 girls
 ## 1    1880       John        Mary    William        Anna      James        Emma
 ## 1001 1881       John        Mary    William        Anna      James        Emma
@@ -128,8 +129,8 @@ topv2 <- function(n = 1) {
         return (result)
 }
 
-## return a dataframe in which each line is a year with the n 
-## most pupular name for boys and for girls (where n is the argument)
+## return a dataframe in which each line is a rank with the most popular 
+## name for boys and for girls for all the year
 ## example : to show top 3 names by year :
 ## > head(top(3)) 
 ##     Year Top 1 boys Top 1 girls Top 2 boys Top 2 girls Top 3 boys Top 3 girls

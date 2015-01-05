@@ -1,7 +1,7 @@
 playwithnames
 =============
 
-## Function : top (and topv2, which is faster for little n and slower for a big n)
+## Function : top 
 
 **Arugment**
 * n (for top 1, call top(), for top 5, call top(5))
